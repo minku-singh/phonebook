@@ -5,20 +5,26 @@ if (process.argv.length < 3) {
   process.exit(1)
 }
 
-const password = process.argv[2]
-
 mongoose.set('strictQuery',false)
 
-mongoose.connect(process.env.MONGODB_URL, { family: 4 }).then(result => {
-    console.log('connected to MongoDB')
-  })
+mongoose.connect(process.env.MONGODB_URL, { family: 4 }).then(() => {
+  console.log('connected to MongoDB')
+})
   .catch(error => {
     console.log('error connecting to MongoDB:', error.message)
   })
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    minLength: 8,
+    required: true
+  },
 })
 
 personSchema.set('toJSON', {
